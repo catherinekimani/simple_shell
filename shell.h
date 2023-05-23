@@ -25,7 +25,7 @@ char *_strcat(char *s1, char *s2);
 char *_strcpy(char *dest, char *src);
 int _strlen(char *s);
 /*custom functions*/
-ssize_t custom_geline(char **custom_line_ptr,
+ssize_t custom_getline(char **custom_line_ptr,
 		      size_t *custom_n,
 		      FILE *custom_stream);
 void update_line_ptr(char **line_ptr,
