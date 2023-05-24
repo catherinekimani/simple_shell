@@ -9,33 +9,87 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <dirent.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#define EXIT -3
+#define END_OF_FILE -2
+
+/**
+  *struct lists_s - struct
+  *@dir_path: A directory path.
+  *@next: pointer
+  */
+
+typedef struct list_s
+{
+	char *dir_path;
+	struct list_s *next;
+} list_t;
+
+/**
+  *struct alias_s - structure for aliases
+  *@name: alias name
+  *@val: value of alias
+  *@next: pointer
+  */
+typedef struct alias_s
+{
+	char *name;
+	char *val;
+	struct alias_s *next;
+} alias_t;
+
+/**
+  *struct builtin_s - structure
+  *@nam2: cmd name
+  *@f: function pointer
+  */
+typedef struct builtin_s
+{
+	char *name;
+	int (*f)(char **av, char **start);
+} builtin_t;
+
+/*global variable */
+
+char *name;
+int history;
+extern char **environ;
+alias_t *alias;
+
 /*macros*/
+
 #define MAX_COMMAND_SIZE 20
 
 /*prototypes*/
-void display_prompt(void);
-void fork_execute(char **argv, char *env[]);
+
+int fork_execute(char **args, char **start);
+void display_prompt(int signal);
+char *fill_path(char *path);
+char *_location(char *cmd);
+int file_commands(char *f_path, int *execute_res);
+
 /*path prototypes*/
+
 int path_check(char *str);
 char *check_file(char *str);
 /*string_utils*/
+
 char **_strtok(char *str);
 int _strcmp(char *s1, char *s2);
 char *_strcat(char *s1, char *s2);
-char *_strcpy(char *dest, char *src);
-int _strlen(char *s);
-/*custom functions*/
-ssize_t custom_getline(char **custom_line_ptr,
-		      size_t *custom_n,
-		      FILE *custom_stream);
-void update_line_ptr(char **line_ptr,
-		     size_t *size,
-		     char *buffer, size_t buffer_size);
-void *custom_realloc(void *ptr,
-		unsigned int old_size_bytes,
-		unsigned int new_size_bytes);
-char **custom_strtok(char *str, char *delim);
-int custom_token_len(char *str, char *delim);
-int custom_count_tokens(char *str, char *delim);
-int check_builtins(char *str);
+/*built in */
+
+/*int check_builtins(char *str);*/
+
+/* list */
+
+alias_t *add_alias(alias_t **head, char *name, char *val);
+void free_alias(alias_t *head);
+list_t *add_head_node(list_t **head, char *dir);
+void free_linkedlist(list_t *head);
+
 #endif /*SHELL_H*/
