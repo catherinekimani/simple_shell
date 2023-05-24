@@ -1,48 +1,49 @@
 #include "shell.h"
 
 /**
- * _strtok - tokenize string
- * @str: string to tokenize
- *
- * Return: Pointer
+ * custom_strncat -  function that concatenates two strings.
+ * @dest: append string
+ * @src: string from which ‘n’ characters are going to append
+ * @n: number of characters to be appended
+ * Return: a pointer
  */
-
-char **_strtok(char *str)
+char *custom_strncat(char *dest, char *src, int n)
 {
-	char **token = NULL, *parse = NULL;
-	int idx = 0, p = 0;
+	int i, src_idx;
 
-	token = malloc(8 * sizeof(char *));
-	if (token == NULL)
+	for (i = 0; dest[i] != '\0'; i++)
+		;
+
+	for (src_idx = 0; src[src_idx] != '\0' && n > 0; src_idx++, n--, i++)
 	{
-		perror("Can't allocate memory");
-		exit(EXIT_FAILURE);
+		dest[i] = src[src_idx];
 	}
-	parse = strtok(str, " ");
-	while (parse != NULL)
-	{
-		while (parse[p])
-		{
-			if (parse[p] == '\n')
-				parse[p] = '\0';
-			p++;
-		}
-		token[idx] = parse;
-		idx++;
-		p = 0;
-		parse = strtok(NULL, " ");
-	}
-	token[idx] = NULL;
-	return (token);
+	return (dest);
 }
 
 /**
- * _strcmp - function that compares two strings
+ *  custom_strlen -  function that returns the len of a str
+ *  @str: Character to be checked
+ *  Return: 0;
+ */
+int custom_strlen(const char *str)
+{
+	int len = 0;
+
+	if (!str)
+		return (len);
+	for (len = 0; str[len]; len++)
+		;
+	return (len);
+}
+
+/**
+ * custom_strcmp - function that compares two strings
  * @s1: first string to be comparedd
  * @s2: second string to be compared
  * Return: 0;
  */
-int _strcmp(char *s1, char *s2)
+int custom_strcmp(char *s1, char *s2)
 {
 	int i = 0;
 
@@ -58,51 +59,37 @@ int _strcmp(char *s1, char *s2)
 }
 
 /**
- * _strcat - concatenates two strings
- * @s1: first string
- * @s2: second string
- *
- * Return: pointer to the concatenated string, or NULL on failure
+ * custom_strcat - function appends the src string to the dest string
+ * @dest: pointer to character
+ * @src: pointer to charcter
+ * Return: a pointer
  */
-char *_strcat(char *s1, char *s2)
+char *custom_strcat(char *dest, char *src)
 {
-	char *concat = NULL;
-	int len1 = 0, len2 = 0, i, j = 0;
+	int i, src_index;
 
-	if (s1 == NULL)
-		s1 = "";
-	if (s2 == NULL)
-		s2 = "";
+	for (i = 0; dest[i] != '\0'; i++)
+		;
 
-	while (s1[len1])
-		len1++;
+	for (src_index = 0; src[src_index] != '\0'; src_index++)
+	{
+		dest[i] = src[src_index];
+		i++;
+	}
 
-	while (s2[len2])
-		len2++;
-
-	concat = malloc(sizeof(char) * (len1 + len2 + 1));
-	if (concat == NULL)
-		return (NULL);
-
-	for (i = 0; i < len1; i++)
-		concat[i] = s1[i];
-
-	for (j = 0; j < len2; j++)
-		concat[i + j] = s2[j];
-
-	concat[i + j] = '\0';
-	return (concat);
+	dest[i] = '\0';
+	return (dest);
 }
 
 /**
- * _strcpy - function that copies the string pointed to by src,
+ * custom_strcpy - function that copies the string pointed to by src,
  * including the terminating null byte (\0),
  * to the buffer pointed to by dest.
  * @dest: point to character
  * @src: pointer to character
  * Return: the pointer to dest
  */
-char *_strcpy(char *dest, char *src)
+char *custom_strcpy(char *dest, char *src)
 {
 	int length, i;
 
@@ -122,15 +109,3 @@ char *_strcpy(char *dest, char *src)
 	return (dest);
 }
 
-/**
- *  _strlen -  function that returns the length of a string
- *  @s: Character to be checked
- *  Return: 0;
- */
-int _strlen(char *s)
-{
-	int length;
-
-	length = strlen(s);
-	return (length);
-}

@@ -51,3 +51,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+custom_strtok.c
+custom_getline.c
