@@ -31,6 +31,13 @@ int main(int argc, char *av[], char *env[])
 	{
 		if (isatty(STDIN_FILENO))
 			display_prompt();
+
+		ptr = malloc(sizeof(char) * n);
+		if (ptr == NULL)
+		{
+			perror("Failed to allocate memory");
+			exit(EXIT_FAILURE);
+		}
 		num_chars = getline(&ptr, &n, stdin);
 		if (num_chars == -1)
 		{
