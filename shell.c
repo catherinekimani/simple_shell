@@ -20,9 +20,9 @@ void display_prompt(void)
 */
 int main(int argc, char *av[], char *env[])
 {
-	char **user_input = NULL;
-	char *f1 = NULL, *ptr = NULL;
-	size_t n = 0, pth = 5;
+	char **user_input;
+	char *f1, *ptr;
+	size_t n = 20, pth = 5, check_builtin;
 	ssize_t num_chars;
 
 	if (argc > 1)
@@ -31,7 +31,7 @@ int main(int argc, char *av[], char *env[])
 	{
 		if (isatty(STDIN_FILENO))
 			display_prompt();
-
+		ptr = malloc(sizeof(char) * n);
 		num_chars = getline(&ptr, &n, stdin);
 		if (num_chars == -1)
 		{
@@ -41,8 +41,11 @@ int main(int argc, char *av[], char *env[])
 		if (*ptr != '\n')
 		{
 			user_input = _strtok(ptr);
+			if (_strcmp("exit", user_input[0]) == 0)
+				break;
+			check_builtin = check_builtins(user_input[0]);
 			f1 = check_file(user_input[0]);
-			if (f1 != NULL)
+			if (check_builtin == 0 && f1 != NULL)
 				user_input[0] = f1;
 			pth = path_check(user_input[0]);
 			if (pth == 1)
@@ -51,8 +54,8 @@ int main(int argc, char *av[], char *env[])
 				printf("./hsh: No such file or directory\n");
 			free(f1);
 		}
+		free(ptr);
 		free(user_input);
 	}
 	exit(0);
 }
-

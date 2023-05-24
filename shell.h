@@ -37,4 +37,5 @@ void *custom_realloc(void *ptr,
 char **custom_strtok(char *str, char *delim);
 int custom_token_len(char *str, char *delim);
 int custom_count_tokens(char *str, char *delim);
+int check_builtins(char *str);
 #endif /*SHELL_H*/
