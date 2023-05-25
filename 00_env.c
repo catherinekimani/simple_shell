@@ -3,12 +3,12 @@
 /**
  * display_env_vars - display environment vars
  * @args: cmd args
- * @front_ptr: double ptr
+ * @start: double ptr
  *
  * Return: 0 SUCCESS
  */
 int display_env_vars(char **args, char
-__attribute__((__unused__)) **front_ptr)
+__attribute__((__unused__)) **start)
 {
 	char new_line = '\n';
 	int idx;
@@ -27,11 +27,11 @@ __attribute__((__unused__)) **front_ptr)
 /**
  * set_shell_env - changes or adds env vars to the PATH
  * @args: cmd args
- * @front_ptr: double ptr
+ * @start: double ptr
  *
  * Return: 0 SUCCESS
  */
-int set_shell_env(char **args, char __attribute__((__unused__)) **front_ptr)
+int set_shell_env(char **args, char __attribute__((__unused__)) **start)
 {
 	char **envVariable = NULL, **newEnv, *newVal;
 	size_t size;
@@ -77,11 +77,11 @@ int set_shell_env(char **args, char __attribute__((__unused__)) **front_ptr)
 /**
  * unset_shell_env - remove an env var to the shell
  * @args: cmd args
- * @front_ptr: double ptr
+ * @start: double ptr
  *
  * Return: 0 SUCCESS
  */
-int unset_shell_env(char **args, char __attribute__((__unused__)) **front_ptr)
+int unset_shell_env(char **args, char __attribute__((__unused__)) **start)
 {
 	char **envVariable, **newEnv;
 	size_t size;

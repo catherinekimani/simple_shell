@@ -3,18 +3,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
-#include <fcntl.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
 #define EXIT -3
 #define END_OF_FILE -2
+
+/*global variable */
+extern char **environ;
+
+char *name;
+int hist;
 
 /**
   *struct list_s- struct
@@ -52,11 +56,7 @@ typedef struct builtin_s
 	int (*f)(char **av, char **start);
 } builtin_t;
 
-/*global variable */
 
-char *name;
-int hist;
-extern char **environ;
 alias_t *aliases;
 
 /*prototypes*/

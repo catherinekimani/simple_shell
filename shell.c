@@ -9,7 +9,7 @@ int fork_execute(char **args, char **start);
  */
 void display_prompt(int sign)
 {
-	char *prompt_user = "\n#cisfun$";
+	char *prompt_user = "\n#cisfun$ ";
 
 	(void)sign;
 	signal(SIGINT, display_prompt);
@@ -89,9 +89,9 @@ int main(int argc, char *av[])
 	aliases = NULL;
 	signal(SIGINT, display_prompt);
 
-	execute_res = 0;
+	*execute_res = 0;
 	environ = copy_env_var();
-	if (environ == NULL)
+	if (!environ)
 		exit(-100);
 
 	if (argc != 1)

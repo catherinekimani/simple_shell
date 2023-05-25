@@ -6,7 +6,7 @@
  *
  * Return: func pointer.
  */
-int (*find_builtin(char *cmd))(char **args, char **front_ptr)
+int (*find_builtin(char *cmd))(char **args, char **start)
 {
 	builtin_t functions[] = {
 		{"exit", shell_custom_exit},
@@ -30,11 +30,11 @@ int (*find_builtin(char *cmd))(char **args, char **front_ptr)
 /**
  * disp_shell_help - display help info for shell commands
  * @args: args
- * @front_ptr: double ptr
+ * @start: double ptr
  *
  * Return: 0
  */
-int disp_shell_help(char **args, char __attribute__((__unused__)) **front_ptr)
+int disp_shell_help(char **args, char __attribute__((__unused__)) **start)
 {
 	if (!args[0])
 		display_help_all();
@@ -60,11 +60,11 @@ int disp_shell_help(char **args, char __attribute__((__unused__)) **front_ptr)
 /**
  * shell_custom_exit - handles the exit command
  * @args: args passed
- * @front_ptr: double ptr
+ * @start: double ptr
  *
  * Return: if successful function does not return
  */
-int shell_custom_exit(char **args, char **front_ptr)
+int shell_custom_exit(char **args, char **start)
 {
 	unsigned int number = 0, max = 1 << (sizeof(int) * 8 - 1);
 	int idx = 0, intLen = 10;
@@ -91,7 +91,7 @@ int shell_custom_exit(char **args, char **front_ptr)
 	if (number > max - 1)
 		return (generate_error(--args, 2));
 	args -= 1;
-	free_argument(args, front_ptr);
+	free_argument(args, start);
 	free_env_vars();
 	free_alias(aliases);
 	exit(number);
@@ -100,11 +100,11 @@ int shell_custom_exit(char **args, char **front_ptr)
 /**
  * shell_change_dir - changes the current dir of the shell.
  * @args: args arr.
- * @front_ptr: double pointer.
+ * @start: double pointer.
  *
  * Return: If the given str is not a dir - 2.
  */
-int shell_change_dir(char **args, char __attribute__((__unused__)) **front_ptr)
+int shell_change_dir(char **args, char __attribute__((__unused__)) **start)
 {
 	char **info_dir, *newLine = "\n";
 	char *oldPwd = NULL, *pwd = NULL;

@@ -3,11 +3,11 @@
 /**
  * execAliasCmd - executes alias cmd
  * @args: args passed
- * @front_ptr: ptr to the front
+ * @start: ptr to the start
  *
  * Return: Return value
  */
-int execAliasCmd(char **args, char __attribute__((__unused__)) **front_ptr)
+int execAliasCmd(char **args, char __attribute__((__unused__)) **start)
 {
 	alias_t *current_alias = aliases;
 	char *val;
