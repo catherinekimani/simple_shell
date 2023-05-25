@@ -136,7 +136,7 @@ void free_linkedlist(list_t *head);
 /* Helpers funtion prototype */
 void free_argument(char **args, char **start);
 char *get_pid(void);
-char *get_env_val(char *begin, int length);
+char *get_env(char *begin, int length);
 void variable_replace(char **args, int *execute_res);
 void h_line(char **line, ssize_t read);
 ssize_t get_len(char *line);
