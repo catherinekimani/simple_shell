@@ -8,7 +8,6 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <dirent.h>
 #include <signal.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -18,7 +17,7 @@
 #define END_OF_FILE -2
 
 /**
-  *struct lists_s - struct
+  *struct list_s- struct
   *@dir_path: A directory path.
   *@next: pointer
   */
@@ -60,10 +59,6 @@ int history;
 extern char **environ;
 alias_t *alias;
 
-/*macros*/
-
-#define MAX_COMMAND_SIZE 20
-
 /*prototypes*/
 
 int fork_execute(char **args, char **start);
@@ -72,10 +67,6 @@ char *fill_path(char *path);
 char *_location(char *cmd);
 int file_commands(char *f_path, int *execute_res);
 
-/*path prototypes*/
-
-int path_check(char *str);
-char *check_file(char *str);
 /*string_utils*/
 char *custom_strncat(char *dest, char *src, int n);
 int custom_strlen(const char *str);
@@ -96,6 +87,10 @@ void update_line_ptr(char **line_ptr,
 			size_t *size,
 			char *buff,
 			size_t buffer_size);
+/*Tokenization*/
+char **_strtok(char *line, char *delims);
+int count_token(char *str, char *delims);
+char **_strtok(char *line, char *delims);
 /*shell environments*/
 int display_env_vars(char **args,
 		     char __attribute__((__unused__)) **front_ptr);
@@ -138,6 +133,30 @@ void free_alias(alias_t *head);
 list_t *add_head_node(list_t **head, char *dir);
 void free_linkedlist(list_t *head);
 
+/* Helpers funtion prototype */
+void free_argument(char **args, char **start);
+char *get_pid(void);
+char *get_env_val(char *begin, int length);
+void variable_replace(char **args, int *execute_res);
+void h_line(char **line, ssize_t read);
+ssize_t get_len(char *line);
+void logic_ops(char *line, ssize_t *newer_len);
+char *get_arguments(char *line, int *execute_res);
+int call_arguments(char **args, char **start, int *execute_res);
+int run_arguments(char **args, char **start, int *execute_res);
+int handle_arguments(int *execute_res);
+int check_arguments(char **args);
 
+/* Error */
+char *error_exit(char **args);
+char *error_envp(char **args);
+char *error_syntax(char **args);
+char *error_one(char **args);
+char *error_cd(char **args);
+char *err_126(char **args);
+char *err_127(char **args);
+int generate_error(char **args, int error);
+int number_lengt(int number);
+char *_itoa(int number);
 
 #endif /*SHELL_H*/
