@@ -1,61 +1,127 @@
 #include "shell.h"
 
+void display_prompt(int sign);
+int fork_execute(char **args, char **start);
 
 /**
- * display_prompt - display prompt
-*/
-void display_prompt(void)
+ *display_prompt - display prompt
+ *@sign: the signal
+ */
+void display_prompt(int sign)
 {
-	const char *prompt_user = "Cisfun$  ";
+	char *prompt_user = "\n#Cisnotfun$  ";
 
-	write(STDOUT_FILENO, prompt_user, strlen(prompt_user));
+	(void)sign;
+	signal(SIGINT, display_prompt);
+	write(STDIN_FILENO, prompt_user, 10);
+}
+/**
+ *fork_execute - execute
+ *@args: arr of args
+ *@start: Begining of argument array
+ *Return: 0 success
+ */
+
+int fork_execute(char **args, char **start)
+{
+	pid_t child_pid;
+	int state, flags = 0, res = 0;
+	char *cmd = args[0];
+
+	if (cmd[0] != '/' && cmd[0] != '.')
+	{
+		flags = 1;
+		cmd = _location(cmd);
+	}
+	if (!cmd || (access(cmd, F_OK) == -1))
+	{
+		if (errno == EACCES)
+			res = (generate_error(args, 126));
+		else
+			res = (generate_error(args, 127));
+	}
+	else
+	{
+		child_pid = fork();
+		if (child_pid == -1)
+		{
+			if (flags)
+				free(cmd);
+			perror("Error in child process:");
+			return (1);
+		}
+		if (child_pid == 0)
+		{
+			execve(cmd, args, environ);
+			if (errno == EACCES)
+				res = (generate_error(args, 126));
+			free_env_vars();
+			free_argument(args, start);
+			free_alias(alias);
+			_exit(res);
+		}
+		else
+		{
+			wait(&state);
+			res = WEXITSTATUS(state);
+		}
+	}
+	if (flags)
+		free(cmd);
+	return (res);
 }
 /**
  * main - entry point
  * @argc: No. of args
  * @av: Arr of args
- * @env: Environment var
  *
  * Return: 0 SUCCESS
 */
-int main(int argc, char *av[], char *env[])
-{
-	char **user_input;
-	char *f1, *ptr;
-	size_t n = 20, pth = 5, check_builtin;
-	ssize_t num_chars;
 
-	if (argc > 1)
-		av[1] = NULL;
-	while (1)
+int main(int argc, char *av[])
+{
+	int res = 0, resn;
+	int *execute_res = &resn;
+	char *user_input = "Cisnfun$", *empty_line = "\n";
+
+	name = av[0];
+	history = 1;
+	alias = NULL;
+	signal(SIGINT, display_prompt);
+
+	execute_res = 0;
+	environ = copy_env_var();
+	if (environ == NULL)
+		exit(-100);
+
+	if (argc != 1)
 	{
-		if (isatty(STDIN_FILENO))
-			display_prompt();
-		ptr = malloc(sizeof(char) * n);
-		num_chars = getline(&ptr, &n, stdin);
-		if (num_chars == -1)
-		{
-			free(ptr);
-			exit(EXIT_FAILURE);
-		}
-		if (*ptr != '\n')
-		{
-			user_input = _strtok(ptr);
-			if (_strcmp("exit", user_input[0]) == 0)
-				break;
-			check_builtin = check_builtins(user_input[0]);
-			f1 = check_file(user_input[0]);
-			if (check_builtin == 0 && f1 != NULL)
-				user_input[0] = f1;
-			pth = path_check(user_input[0]);
-			if (pth == 1)
-				fork_execute(user_input, env);
-			if (f1 == NULL && pth == 0)
-				printf("./hsh: No such file or directory\n");
-			free(f1);
-		}
-		free(ptr);
-		free(user_input);
+		res = file_commands(av[1], execute_res);
+		free_env_vars();
+		free_alias(alias);
+		return (*execute_res);
 	}
-	exit(0);
+	if (!isatty(STDIN_FILENO))
+	{
+		while (res != END_OF_FILE && res != EXIT)
+			res = handle_arguments(execute_res);
+		free_env_vars();
+		free_alias(alias);
+		return (*execute_res);
+	} while (1);
+	{
+		write(STDOUT_FILENO, user_input, 10);
+		res = handle_arguments(execute_res);
+		if (res == END_OF_FILE || res == EXIT)
+		{
+			if (res == END_OF_FILE)
+				write(STDOUT_FILENO, empty_line, 10);
+			free_env_vars();
+			free_alias(alias);
+			exit(*execute_res);
+		}
+	}
+	free_env_vars();
+	free_alias(alias);
+	return (*execute_res);
 }
