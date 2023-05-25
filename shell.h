@@ -89,7 +89,7 @@ void update_line_ptr(char **line_ptr,
 			char *buff,
 			size_t buffer_size);
 /*Tokenization*/
-int token_length(char *str, char *delims)
+int token_length(char *str, char *delims);
 int count_token(char *str, char *delims);
 char **_strtok(char *line, char *delims);
 /*shell environments*/
