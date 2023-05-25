@@ -66,7 +66,7 @@ char *get_env(char *begin, int length)
 		return (NULL);
 	variable[0] = '\0';
 	custom_strncat(variable, begin, length);
-	addr = _getenv(variable);
+	addr = get_env_val(variable);
 	free(variable);
 	if (addr)
 	{
@@ -74,9 +74,9 @@ char *get_env(char *begin, int length)
 		while (*temp != '=')
 			temp++;
 		temp++;
-		replace = malloc(_strlen(temp) + 1);
+		replace = malloc(custom_strlen(temp) + 1);
 		if (replace)
-			_strcpy(replace, temp);
+			custom_strcpy(replace, temp);
 	}
 	return (replace);
 }
@@ -115,7 +115,7 @@ void variable_replace(char **line, int *execute_res)
 						older_line[n] != ' '; n++)
 					;
 				length = n - (i + 1);
-				replace = get_env_val(&older_line[i + 1], length);
+				replace = get_env(&older_line[i + 1], length);
 			}
 			newer_line = malloc(i + custom_strlen(replace)
 					+ custom_strlen(&older_line[n]) + 1);

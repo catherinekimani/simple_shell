@@ -11,27 +11,27 @@ int file_commands(char *f_path, int *execute_res);
 
 int _open(char *f_path)
 {
-	char *err, history_str;
+	char *err, *history_str;
 	int length;
 
-	history_str = _itoa(history);
+	history_str = _itoa(hist);
 	if (history_str)
 		return (127);
 
-	length = _strlen(name) + _strlen(history_str) +
-		_strlen(f_path) + 16;
+	length = custom_strlen(name) + custom_strlen(f_path) +
+		custom_strlen(f_path) + 16;
 	err = malloc(sizeof(char) * (length + 1));
 	if (!err)
 	{
 		free(history_str);
 		return (127);
 	}
-	_strcpy(err, name);
-	_strcat(err, ": ");
-	_strcat(err, history_str);
-	_strcat(err, ": cannot open");
-	_strcat(err, f_path);
-	_strcat(err, "\n");
+	custom_strcpy(err, name);
+	custom_strcat(err, ": ");
+	custom_strcat(err, history_str);
+	custom_strcat(err, ": cannot open");
+	custom_strcat(err, f_path);
+	custom_strcat(err, "\n");
 
 	free(history_str);
 	write(STDERR_FILENO, err, length);
@@ -48,31 +48,31 @@ i  *@f_path: file path
 int file_commands(char *f_path, int *execute_res)
 {
 	unsigned int new_size = 0;
-	unsigned int old_size = 100;
+	unsigned int old_size = 120;
 	char *line, **args, **start;
-	char buff[100];
+	char buff[120];
 	int res;
 	ssize_t file, buff_read, j;
 
-	history = 0;
+	hist = 0;
 
 	file = open(f_path, O_RDONLY);
 	if (file == -1)
 	{
-		execute_res = _open(f_path);
+		*execute_res = _open(f_path);
 		return (*execute_res);
 	}
 	line = malloc(sizeof(char) * old_size);
 	if (line == NULL)
 		return (-1);
 	do {
-		buff_read = read(file, buff, 99);
+		buff_read = read(file, buff, 119);
 		if (buff_read == 0 && new_size == 0)
-			return (execute_res);
+			return (*execute_res);
 		buff[buff_read] = '\0';
 		new_size += buff_read;
 		line = custom_realloc(line, old_size, new_size);
-		_strcat(line, buff);
+		custom_strcat(line, buff);
 		old_size = new_size;
 	} while (buff_read);
 	for (j = 0; line[j] == '\n'; j++)
@@ -87,8 +87,8 @@ int file_commands(char *f_path, int *execute_res)
 				line[j] = ' ';
 		}
 	}
-	variable_replacement(&line, execute_res);
-	handle_line(&line, new_size);
+	variable_replace(&line, execute_res);
+	h_line(&line, new_size);
 	args = _strtok(line, " ");
 	free(line);
 	if (!args)
@@ -96,22 +96,22 @@ int file_commands(char *f_path, int *execute_res)
 	if (check_arguments(args) != 0)
 	{
 		*execute_res = 2;
-		free_args(args, args);
+		free_argument(args, args);
 		return (*execute_res);
 	}
 	start = args;
 	for (j = 0; args[j]; j++)
 	{
-		if (_strncmp(args[j], ";", 1) == 0)
+		if (custom_strncmp(args[j], ";", 1) == 0)
 		{
 			free(args[j]);
 			args[j] = NULL;
-			res = call_args(args, start, execute_res);
+			res = call_arguments(args, start, execute_res);
 			args = &args[++j];
 			j = 0;
 		}
 	}
-	res = call_args(args, start, execute_res);
+	res = call_arguments(args, start, execute_res);
 	free(start);
 	return (res);
 }

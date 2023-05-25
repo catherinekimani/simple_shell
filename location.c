@@ -14,9 +14,9 @@ char *_location(char *cmd)
 {
 	char **path, *temp;
 	list_t *dir, *head;
-	struct state st;
+	struct stat st;
 
-	path = _getenv("PATH");
+	path = get_env_val("PATH");
 	if (!path || !(*path))
 		return (NULL);
 	dir = get_path(*path + 5);
@@ -24,13 +24,13 @@ char *_location(char *cmd)
 
 	while (dir)
 	{
-		temp = malloc(_strlen(dir->dir_path) + _strlen(cmd) + 2);
+		temp = malloc(custom_strlen(dir->dir_path) + custom_strlen(cmd) + 2);
 		if (!temp)
 			return (NULL);
-		_strcpy(temp, dir->dir_path);
-		_strcat(temp, "/");
-		_strcat(temp, cmd);
-		if (state(temp, &st) == 0)
+		custom_strcpy(temp, dir->dir_path);
+		custom_strcat(temp, "/");
+		custom_strcat(temp, cmd);
+		if (stat(temp, &st) == 0)
 		{
 			free_linkedlist(head);
 			return (temp);
@@ -82,13 +82,13 @@ char *fill_path(char *path)
 	char *path_, *pwd;
 	int j, len = 0;
 
-	pwd = *(_getenv("PWD")) + 4;
+	pwd = *(get_env_val("PWD")) + 4;
 	for (j = 0; path[j]; j++)
 	{
 		if (path[j] == ':')
 		{
 			if (path[j + 1] == ':' || j == 0 || path[j + 1] == '\0')
-				len += _strlen(pwd) + 1;
+				len += custom_strlen(pwd) + 1;
 			else
 				len++;
 		}
@@ -105,20 +105,20 @@ char *fill_path(char *path)
 		{
 			if (j == 0)
 			{
-				_strcat(path_, pwd);
-				_strcat(path_, ":");
+				custom_strcat(path_, pwd);
+				custom_strcat(path_, ":");
 			}
 			else if (path[j + 1] == ':' || path[j + 1] == '\0')
 			{
-				_strcat(path_, ":");
-				_strcat(path_, pwd);
+				custom_strcat(path_, ":");
+				custom_strcat(path_, pwd);
 			}
 			else
-				_strcat(path_, ":");
+				custom_strcat(path_, ":");
 		}
 		else
 		{
-			_strncat(path_, &path[j], 1);
+			custom_strncat(path_, &path[j], 1);
 		}
 	}
 	return (path_);

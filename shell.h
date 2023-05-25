@@ -55,9 +55,9 @@ typedef struct builtin_s
 /*global variable */
 
 char *name;
-int history;
+int hist;
 extern char **environ;
-alias_t *alias;
+alias_t *aliases;
 
 /*prototypes*/
 
@@ -106,7 +106,7 @@ void free_env_vars(void);
 int execAliasCmd(char **args, char __attribute__((__unused__)) **front_ptr);
 void setAliasValue(char *variable_name, char *new_value);
 void display_alias(alias_t *alias);
-
+char **replace_alias(char **args);
 /*helpers*/
 void display_help_alias(void);
 void help_builtin(void);

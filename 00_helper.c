@@ -3,7 +3,7 @@
 int check_arguments(char **args);
 int run_arguments(char **args, char **start, int *execute_res);
 char *get_arguments(char *line, int *execute_res);
-int call_argument(char **args, char **start, int *execute_res);
+int call_arguments(char **args, char **start, int *execute_res);
 int handle_arguments(int *execute_res);
 
 /**
@@ -22,12 +22,12 @@ char *get_arguments(char *line, int *execute_res)
 
 	if (line)
 		free(line);
-	len = _getline(&line, &i, STDIN_FILENO);
+	len = custom_getline(&line, &i, STDIN_FILENO);
 	if (len == -1)
 		return (NULL);
 	if (len == 1)
 	{
-		history++;
+		hist++;
 		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, prompt, 2);
 		return (get_arguments(line, execute_res));
@@ -76,7 +76,7 @@ int call_arguments(char **args, char **start, int *execute_res)
 			free(args[idx]);
 			args[idx] = NULL;
 			args = replace_alias(args);
-			res = run_argumenst(args, start, execute_res);
+			res = run_arguments(args, start, execute_res);
 			if (*execute_res == 0)
 			{
 				args = &args[++idx];
@@ -108,7 +108,7 @@ int run_arguments(char **args, char **start, int *execute_res)
 	int res, x;
 	int (*built_in)(char **args, char **start);
 
-	built_in = get_builtin(args[0]);
+	built_in = find_builtin(args[0]);
 
 	if (built_in)
 	{
@@ -118,10 +118,10 @@ int run_arguments(char **args, char **start, int *execute_res)
 	}
 	else
 	{
-		*execute_res = execute(args, start);
+		*execute_res = fork_execute(args, start);
 		res = *execute_res;
 	}
-	history++;
+	hist++;
 	for (x = 0; args[x]; x++)
 		free(args[x]);
 	return (res);
@@ -147,7 +147,7 @@ int handle_arguments(int *execute_res)
 	if (check_arguments(args) != 0)
 	{
 		*execute_res = 2;
-		free_arguments(args, args);
+		free_argument(args, args);
 		return (*execute_res);
 	}
 	start = args;
@@ -185,10 +185,10 @@ int check_arguments(char **args)
 		if (curr[0] == ';' || curr[0] == '&' || curr[0] == '|')
 		{
 			if (x == 0 || curr[1] == ';')
-				return (create_error(&args[x], 2));
+				return (generate_error(&args[x], 2));
 			next = args[x + 1];
 			if (next && (next[0] == ';' || next[0] == '&' || next[0] == '|'))
-				return (create_error(&args[x + 1], 2));
+				return (generate_error(&args[x + 1], 2));
 		}
 	}
 	return (0);

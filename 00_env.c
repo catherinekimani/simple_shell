@@ -7,7 +7,8 @@
  *
  * Return: 0 SUCCESS
  */
-int display_env_vars(char **args, char __attribute__((__unused__)) * *front_ptr)
+int display_env_vars(char **args, char
+__attribute__((__unused__)) **front_ptr)
 {
 	char new_line = '\n';
 	int idx;
@@ -41,7 +42,7 @@ int set_shell_env(char **args, char __attribute__((__unused__)) **front_ptr)
 
 	newVal = malloc(custom_strlen(args[0]) + 1 + custom_strlen(args[1]) + 1);
 	if (!newVal)
-		return (create_error(args, -1));
+		return (generate_error(args, -1));
 	custom_strcat(newVal, args[0]);
 	custom_strcat(newVal, "=");
 	custom_strcat(newVal, args[1]);

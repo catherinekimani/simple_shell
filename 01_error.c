@@ -14,7 +14,7 @@ char *err_126(char **args)
 	int length;
 	char *err, *history_str;
 
-	history_str = _itoa(history);
+	history_str = _itoa(hist);
 	if (!history_str)
 		return (NULL);
 	length = custom_strlen(name) + custom_strlen(history_str) +
@@ -45,7 +45,7 @@ char *err_127(char **args)
 	char *err, *history_str;
 	int length;
 
-	history_str = _itoa(history);
+	history_str = _itoa(hist);
 	if (!history_str)
 		return (NULL);
 	length = custom_strlen(name) + custom_strlen(history_str) +

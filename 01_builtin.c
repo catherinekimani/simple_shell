@@ -93,7 +93,7 @@ int shell_custom_exit(char **args, char **front_ptr)
 	args -= 1;
 	free_argument(args, front_ptr);
 	free_env_vars();
-	free_alias(alias);
+	free_alias(aliases);
 	exit(number);
 }
 

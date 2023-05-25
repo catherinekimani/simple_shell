@@ -9,9 +9,9 @@
  */
 int execAliasCmd(char **args, char __attribute__((__unused__)) **front_ptr)
 {
-	alias_t *current_alias = alias;
+	alias_t *current_alias = aliases;
 	char *val;
-	int return_value = 0, idx;
+	int ret_value = 0, idx;
 
 	if (!args[0])
 	{
@@ -20,11 +20,11 @@ int execAliasCmd(char **args, char __attribute__((__unused__)) **front_ptr)
 			display_alias(current_alias);
 			current_alias = current_alias->next;
 		}
-		return (return_value);
+		return (ret_value);
 	}
 	for (idx = 0; args[idx]; idx++)
 	{
-		current_alias = alias;
+		current_alias = aliases;
 		val = custom_strchr(args[idx], '=');
 		if (!val)
 		{
@@ -38,12 +38,12 @@ int execAliasCmd(char **args, char __attribute__((__unused__)) **front_ptr)
 				current_alias = current_alias->next;
 			}
 			if (!current_alias)
-				return_value = create_error(args + idx, 1);
+				ret_value = generate_error(args + idx, 1);
 		}
 		else
 			setAliasValue(args[idx], val);
 	}
-	return (return_value);
+	return (ret_value);
 }
 
 /**
@@ -53,7 +53,7 @@ int execAliasCmd(char **args, char __attribute__((__unused__)) **front_ptr)
  */
 void setAliasValue(char *variable_name, char *new_value)
 {
-	alias_t *temp_alias = alias;
+	alias_t *temp_alias = aliases;
 	char *fmtValue;
 	int length, idx1, idx2;
 
@@ -80,7 +80,7 @@ void setAliasValue(char *variable_name, char *new_value)
 		temp_alias = temp_alias->next;
 	}
 	if (!temp_alias)
-		add_alias(&alias, variable_name, fmtValue);
+		add_alias(&aliases, variable_name, fmtValue);
 }
 
 /**
@@ -103,4 +103,44 @@ void display_alias(alias_t *alias)
 
 	write(STDOUT_FILENO, fmtAlias, length);
 	free(fmtAlias);
+}
+
+/**
+ * replace_alias - replace any matching alias
+ * @args: args.
+ *
+ * Return: pointer.
+ */
+char **replace_alias(char **args)
+{
+	alias_t *tempAlias;
+	int idx;
+	char *newValue;
+
+	if (custom_strcmp(args[0], "alias") == 0)
+		return (args);
+	for (idx = 0; args[idx]; idx++)
+	{
+		tempAlias = aliases;
+		while (tempAlias)
+		{
+			if (custom_strcmp(args[idx], tempAlias->name) == 0)
+			{
+				newValue = malloc(sizeof(char) * (custom_strlen(tempAlias->val) + 1));
+				if (!newValue)
+				{
+					free_argument(args, args);
+					return (NULL);
+				}
+				custom_strcpy(newValue, tempAlias->val);
+				free(args[idx]);
+				args[idx] = newValue;
+				idx--;
+				break;
+			}
+			tempAlias = tempAlias->next;
+		}
+	}
+
+	return (args);
 }

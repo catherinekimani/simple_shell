@@ -20,7 +20,7 @@ alias_t *add_alias(alias_t **head, char *name, char *val)
 	if (!newNode)
 		return (NULL);
 	newNode->next = NULL;
-	newNode->name = malloc(sizeof(char) * (_strlen(name) + 1));
+	newNode->name = malloc(sizeof(char) * (custom_strlen(name) + 1));
 
 	if (!newNode->name)
 	{
@@ -28,7 +28,7 @@ alias_t *add_alias(alias_t **head, char *name, char *val)
 		return (NULL);
 	}
 	newNode->val = val;
-	_strcpy(newNode->name, name);
+	custom_strcpy(newNode->name, name);
 
 	if (*head)
 	{

@@ -9,7 +9,7 @@ int fork_execute(char **args, char **start);
  */
 void display_prompt(int sign)
 {
-	char *prompt_user = "\n#Cisnotfun$  ";
+	char *prompt_user = "\n#cisfun$";
 
 	(void)sign;
 	signal(SIGINT, display_prompt);
@@ -57,7 +57,7 @@ int fork_execute(char **args, char **start)
 				res = (generate_error(args, 126));
 			free_env_vars();
 			free_argument(args, start);
-			free_alias(alias);
+			free_alias(aliases);
 			_exit(res);
 		}
 		else
@@ -82,11 +82,11 @@ int main(int argc, char *av[])
 {
 	int res = 0, resn;
 	int *execute_res = &resn;
-	char *user_input = "Cisnfun$", *empty_line = "\n";
+	char *user_input = "#cisfun$ ", *empty_line = "\n";
 
 	name = av[0];
-	history = 1;
-	alias = NULL;
+	hist = 1;
+	aliases = NULL;
 	signal(SIGINT, display_prompt);
 
 	execute_res = 0;
@@ -98,7 +98,7 @@ int main(int argc, char *av[])
 	{
 		res = file_commands(av[1], execute_res);
 		free_env_vars();
-		free_alias(alias);
+		free_alias(aliases);
 		return (*execute_res);
 	}
 	if (!isatty(STDIN_FILENO))
@@ -106,22 +106,23 @@ int main(int argc, char *av[])
 		while (res != END_OF_FILE && res != EXIT)
 			res = handle_arguments(execute_res);
 		free_env_vars();
-		free_alias(alias);
+		free_alias(aliases);
 		return (*execute_res);
-	} while (1);
+	}
+	while (1)
 	{
 		write(STDOUT_FILENO, user_input, 10);
 		res = handle_arguments(execute_res);
 		if (res == END_OF_FILE || res == EXIT)
 		{
 			if (res == END_OF_FILE)
-				write(STDOUT_FILENO, empty_line, 10);
+				write(STDOUT_FILENO, empty_line, 2);
 			free_env_vars();
-			free_alias(alias);
+			free_alias(aliases);
 			exit(*execute_res);
 		}
 	}
 	free_env_vars();
-	free_alias(alias);
+	free_alias(aliases);
 	return (*execute_res);
 }
