@@ -93,17 +93,17 @@ int count_token(char *str, char *delims);
 char **_strtok(char *line, char *delims);
 /*shell environments*/
 int display_env_vars(char **args,
-		     char __attribute__((__unused__)) **front_ptr);
+		     char __attribute__((__unused__)) **start);
 int set_shell_env(char **args,
-		  char __attribute__((__unused__)) **front_ptr);
+		  char __attribute__((__unused__)) **start);
 int unset_shell_env(char **args,
-			char __attribute__((__unused__)) **front_ptr);
+			char __attribute__((__unused__)) **start);
 char **get_env_val(const char *variable);
 char **copy_env_var(void);
 void free_env_vars(void);
 
 /*alias prototypes*/
-int execAliasCmd(char **args, char __attribute__((__unused__)) **front_ptr);
+int execAliasCmd(char **args, char __attribute__((__unused__)) **start);
 void setAliasValue(char *variable_name, char *new_value);
 void display_alias(alias_t *alias);
 char **replace_alias(char **args);
@@ -119,11 +119,11 @@ void display_help_unset_env(void);
 
 /*built in */
 int shell_change_dir(char **args,
-		     char __attribute__((__unused__)) **front_ptr);
+		     char __attribute__((__unused__)) **start);
 int shell_custom_exit(char **args, char **front_ptr);
 int disp_shell_help(char **args,
-		    char __attribute__((__unused__)) **front_ptr);
-int (*find_builtin(char *cmd))(char **args, char **front_ptr);
+		    char __attribute__((__unused__)) **start);
+int (*find_builtin(char *cmd))(char **args, char **start);
 
 
 /* list */
