@@ -91,8 +91,7 @@ void update_line_ptr(char **line_ptr,
  */
 ssize_t custom_getline(char **custom_line_ptr,
 			size_t *custom_n,
-			FILE * custom_stream
-			)
+			FILE *custom_stream)
 {
 	static ssize_t custom_input;
 	ssize_t custom_result;

@@ -68,13 +68,14 @@ char *_location(char *cmd);
 int file_commands(char *f_path, int *execute_res);
 
 /*string_utils*/
-char *custom_strncat(char *dest, char *src, int n);
+
+char *custom_strncat(char *dest, const char *src, size_t n);
+char *custom_strcpy(char *dest, const char *src);
+char *custom_strcat(char *dest, const char *src);
 int custom_strlen(const char *str);
-char *custom_strcat(char *dest, char *src);
-char *custom_strcpy(char *dest, char *src);
 int custom_strcmp(char *s1, char *s2);
 int custom_strncmp(const char *s1, const char *s2, size_t n);
-unsigned int custom_strspn(char *s, char *accept);
+int custom_strspn(char *s, char *accept);
 char *custom_strchr(char *s, char c);
 /*custom_getline function*/
 ssize_t custom_getline(char **custom_line_ptr,

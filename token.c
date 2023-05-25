@@ -88,7 +88,7 @@ char **_strtok(char *line, char *delims)
 			ptr[i][j] = line[idx];
 			idx++;
 		}
-		ptr[i][1] = line[idx];
+		ptr[i][j] = '\0';
 	}
 	ptr[i] = NULL;
 	ptr[i + 1] = NULL;

@@ -63,7 +63,7 @@ int file_commands(char *f_path, int *execute_res)
 		return (*execute_res);
 	}
 	line = malloc(sizeof(char) * old_size);
-	if (line == NULL)
+	if (!line)
 		return (-1);
 	do {
 		buff_read = read(file, buff, 119);

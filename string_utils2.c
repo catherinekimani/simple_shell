@@ -11,16 +11,16 @@
  */
 int custom_strncmp(const char *s1, const char *s2, size_t n)
 {
-	size_t i;
+	size_t j;
 
-	for (i = 0; s1[i] && s2[i] && i < n; i++)
+	for (j = 0; s1[j] && s2[j] && j < n; j++)
 	{
-		if (s1[i] > s2[i])
-			return (s1[i] - s2[i]);
-		else if (s1[i] < s2[i])
-			return (s1[i] - s2[i]);
+		if (s1[j] > s2[j])
+			return (s1[j] - s2[j]);
+		else if (s1[j] < s2[j])
+			return (s1[j] - s2[j]);
 	}
-	if (i == n)
+	if (j == n)
 		return (0);
 	else
 		return (-15);
@@ -32,9 +32,9 @@ int custom_strncmp(const char *s1, const char *s2, size_t n)
  * @accept: characters
  * Return:  number of bytes in the initial segment of s
  */
-unsigned int custom_strspn(char *s, char *accept)
+int custom_strspn(char *s, char *accept)
 {
-	unsigned int i = 0;
+	int i = 0;
 	int j;
 
 	while (*s)
@@ -45,10 +45,6 @@ unsigned int custom_strspn(char *s, char *accept)
 			{
 				i++;
 				break;
-			}
-			else if (accept[j + 1] == '\0')
-			{
-				return (i);
 			}
 		}
 		s++;
@@ -64,18 +60,12 @@ unsigned int custom_strspn(char *s, char *accept)
  */
 char *custom_strchr(char *s, char c)
 {
-	while (*s != '\0')
+	int idx;
+
+	for (idx = 0; s[idx]; idx++)
 	{
-		if (*s == c)
-		{
-			return (s);
-		}
-		s++;
-	}
-	if (c == '\0')
-	{
-		return (s);
+		if (s[idx] == c)
+			return (s + idx);
 	}
 	return (NULL);
 }
-

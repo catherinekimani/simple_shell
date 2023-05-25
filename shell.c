@@ -116,7 +116,7 @@ int main(int argc, char *av[])
 		if (res == END_OF_FILE || res == EXIT)
 		{
 			if (res == END_OF_FILE)
-				write(STDOUT_FILENO, empty_line, 2);
+				write(STDOUT_FILENO, empty_line, 10);
 			free_env_vars();
 			free_alias(aliases);
 			exit(*execute_res);

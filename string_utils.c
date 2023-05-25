@@ -7,17 +7,15 @@
  * @n: number of characters to be appended
  * Return: a pointer
  */
-char *custom_strncat(char *dest, char *src, int n)
+char *custom_strncat(char *dest, const char *src, size_t n)
 {
-	int i, src_idx;
+	size_t j;
+	size_t dest_l = custom_strlen(dest);
 
-	for (i = 0; dest[i] != '\0'; i++)
-		;
+	for (j = 0; j < n && src[j] != '\0'; j++)
+		dest[dest_l + j] = src[j];
+	dest[dest_l + j] = '\0';
 
-	for (src_idx = 0; src[src_idx] != '\0' && n > 0; src_idx++, n--, i++)
-	{
-		dest[i] = src[src_idx];
-	}
 	return (dest);
 }
 
@@ -64,20 +62,19 @@ int custom_strcmp(char *s1, char *s2)
  * @src: pointer to charcter
  * Return: a pointer
  */
-char *custom_strcat(char *dest, char *src)
+char *custom_strcat(char *dest, const char *src)
 {
-	int i, src_index;
+	char *destTmp;
+	const char *srcTmp;
 
-	for (i = 0; dest[i] != '\0'; i++)
-		;
+	destTmp = dest;
+	srcTmp =  src;
 
-	for (src_index = 0; src[src_index] != '\0'; src_index++)
-	{
-		dest[i] = src[src_index];
-		i++;
-	}
-
-	dest[i] = '\0';
+	while (*destTmp != '\0')
+		destTmp++;
+	while (*srcTmp != '\0')
+		*destTmp++ = *srcTmp++;
+	*destTmp = '\0';
 	return (dest);
 }
 
@@ -89,23 +86,12 @@ char *custom_strcat(char *dest, char *src)
  * @src: pointer to character
  * Return: the pointer to dest
  */
-char *custom_strcpy(char *dest, char *src)
+char *custom_strcpy(char *dest, const char *src)
 {
-	int length, i;
+	size_t len;
 
-	length = 0;
-
-	while (src[length] != '\0')
-	{
-		length++;
-	}
-
-	for (i = 0; i < length; i++)
-	{
-		dest[i] = src[i];
-	}
-	dest[i] = '\0';
-
+	for (len = 0; src[len] != '\0'; len++)
+		dest[len] = src[len];
+	dest[len] = '\0';
 	return (dest);
 }
-

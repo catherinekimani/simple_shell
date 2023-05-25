@@ -177,7 +177,7 @@ int handle_arguments(int *execute_res)
 int check_arguments(char **args)
 {
 	size_t x;
-	char *curr, *next;
+	char *curr, *_next;
 
 	for (x = 0; args[x]; x++)
 	{
@@ -186,8 +186,8 @@ int check_arguments(char **args)
 		{
 			if (x == 0 || curr[1] == ';')
 				return (generate_error(&args[x], 2));
-			next = args[x + 1];
-			if (next && (next[0] == ';' || next[0] == '&' || next[0] == '|'))
+			_next = args[x + 1];
+			if (_next && (_next[0] == ';' || _next[0] == '&' || _next[0] == '|'))
 				return (generate_error(&args[x + 1], 2));
 		}
 	}
