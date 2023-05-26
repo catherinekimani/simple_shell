@@ -105,7 +105,7 @@ void free_env_vars(void);
 
 /*alias prototypes*/
 int execAliasCmd(char **args, char __attribute__((__unused__)) **start);
-void setAliasValue(char *variable_name, char *new_value);
+void setAliasValue(char *variable_name, char *val);
 void display_alias(alias_t *alias);
 char **replace_alias(char **args);
 /*helpers*/

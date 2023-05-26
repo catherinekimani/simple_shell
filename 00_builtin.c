@@ -51,22 +51,22 @@ int execAliasCmd(char **args, char __attribute__((__unused__)) **start)
  * @variable_name: name of alias variable
  * @new_value: New value to assign
  */
-void setAliasValue(char *variable_name, char *new_value)
+void setAliasValue(char *variable_name, char *val)
 {
 	alias_t *temp_alias = aliases;
 	char *fmtValue;
 	int length, idx1, idx2;
 
-	*new_value = '\0';
-	new_value++;
-	length = custom_strlen(new_value) - custom_strspn(new_value, "'\"");
+	*val = '\0';
+	val++;
+	length = custom_strlen(val) - custom_strspn(val, "'\"");
 	fmtValue = malloc(sizeof(char) * (length + 1));
 	if (!fmtValue)
 		return;
-	for (idx1 = 0, idx2 = 0; new_value[idx1]; idx1++)
+	for (idx1 = 0, idx2 = 0; val[idx1]; idx1++)
 	{
-		if (new_value[idx1] != '\'' && new_value[idx1] != '"')
-			fmtValue[idx2++] = new_value[idx1];
+		if (val[idx1] != '\'' && val[idx1] != '"')
+			fmtValue[idx2++] = val[idx1];
 	}
 	fmtValue[idx2] = '\0';
 	while (temp_alias)
