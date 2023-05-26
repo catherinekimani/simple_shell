@@ -27,7 +27,7 @@ char **copy_env_var(void)
 {
 	char **newEnv;
 	int idx;
-	ssize_t size;
+	size_t size;
 
 	for (size = 0; environ[size]; size++)
 		;
