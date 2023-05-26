@@ -49,7 +49,7 @@ int execAliasCmd(char **args, char __attribute__((__unused__)) **start)
 /**
  * setAliasValue - set value of an alias
  * @variable_name: name of alias variable
- * @new_value: New value to assign
+ * @val: New value to assign
  */
 void setAliasValue(char *variable_name, char *val)
 {
