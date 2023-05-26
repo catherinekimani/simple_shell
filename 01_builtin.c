@@ -108,7 +108,7 @@ int shell_change_dir(char **args, char __attribute__((__unused__)) **start)
 {
 	char **info_dir, *newLine = "\n";
 	char *oldPwd = NULL, *pwd = NULL;
-	struct stat directory;
+	struct stat dir_path;
 
 	oldPwd = getcwd(oldPwd, 0);
 	if (!oldPwd)
@@ -132,8 +132,8 @@ int shell_change_dir(char **args, char __attribute__((__unused__)) **start)
 		}
 		else
 		{
-			if (stat(args[0], &directory) == 0 && S_ISDIR(directory.st_mode) &&
-				((directory.st_mode & S_IXUSR) != 0))
+			if (stat(args[0], &dir_path) == 0 && S_ISDIR(dir_path.st_mode) &&
+				((dir_path.st_mode & S_IXUSR) != 0))
 
 				chdir(args[0]);
 			else
@@ -176,4 +176,3 @@ int shell_change_dir(char **args, char __attribute__((__unused__)) **start)
 	free(info_dir);
 	return (0);
 }
-
